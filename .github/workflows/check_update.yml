@@ -1,0 +1,26 @@
+name: Check update
+
+on:
+  schedule:
+    - cron: '0 19 * * *'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      is_updated: ${{ steps.check.outputs.is_updated }}
+    steps:
+      - name: check
+        uses: smilerobotics/actions-check-github-repository-update@v1
+        id: check
+        with:
+          repository: IntelRealSense/realsense-ros
+          ref: development
+          working_directory: .
+          command_output: ~/development
+          cache_key_prefix: development
+  build:
+    needs: [check]
+    if: ${{ needs.check.outputs.is_updated == 'true' }}
+    uses: smilerobotics/ros-bloom-generate-intel-real-sense-realsense-ros/.github/workflows/build.yml@main

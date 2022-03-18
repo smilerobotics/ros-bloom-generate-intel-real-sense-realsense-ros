@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        ROS_DISTRO: ["melodic", "noetic"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: smilerobotics/actions-ros-bloom-generate@v1
+        with:
+          repository_owner: IntelRealSense
+          repository: realsense-ros
+          ref: development
+          ros_distro: ${{ matrix.ROS_DISTRO }}
+          targets: ./realsense-ros/realsense2_description ./realsense-ros/realsense2_camera
+          name_prefix: ${{ matrix.ROS_DISTRO }}-
+          repository_type: github
+          setup_dependencies_script_path: ./setup_dependencies.sh
