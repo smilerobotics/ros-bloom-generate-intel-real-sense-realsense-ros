@@ -13,7 +13,7 @@ jobs:
         ROS_DISTRO: ["melodic", "noetic"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: smilerobotics/actions-ros-bloom-generate@v1
         with:
           repository_owner: IntelRealSense
